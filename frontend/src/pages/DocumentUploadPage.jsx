@@ -365,7 +365,7 @@ const DocumentUploadPage = () => {
   const folderInputRef = useRef(null);
 
   // Base API URL
-  const API_BASE = 'http://localhost:3000/api';
+  const API_BASE = 'https://drive-1-n7u7.onrender.com/api';
 
   // Get auth token (adjust based on your auth implementation)
   const getAuthToken = () => {
