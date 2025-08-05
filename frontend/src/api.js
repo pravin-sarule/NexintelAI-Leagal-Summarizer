@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://localhost:5000/api', // Adjust if your backend runs on a different port
+  baseURL: 'http://localhost:3000/api', // Adjust if your backend runs on a different port
 });
 
 API.interceptors.request.use((config) => {
@@ -13,5 +13,8 @@ API.interceptors.request.use((config) => {
 }, (error) => {
   return Promise.reject(error);
 });
+
+export const registerUser = (userData) => API.post('/auth/register', userData);
+export const loginUser = (credentials) => API.post('/auth/login', credentials);
 
 export default API;

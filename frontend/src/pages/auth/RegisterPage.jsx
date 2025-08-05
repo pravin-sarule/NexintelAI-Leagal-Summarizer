@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { registerUser } from '../../api'; // Import the API function
 
 const RegisterPage = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
@@ -16,24 +15,16 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ firstName, lastName, email, mobile, password }),
-      });
+      const res = await registerUser({ username, email, password });
 
-      const data = await res.json();
-
-      if (res.ok) {
+      if (res.status === 201) {
         toast.success('Registration successful!');
         navigate('/login');
       } else {
-        toast.error(data.message || 'Registration failed.');
+        toast.error(res.data.message || 'Registration failed.');
       }
     } catch (error) {
-      toast.error('Network error. Please try again later.');
+      toast.error(error.response?.data?.message || 'Network error. Please try again later.');
     }
   };
 
@@ -43,29 +34,16 @@ const RegisterPage = () => {
         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         <form onSubmit={submitHandler}>
           <div className="mb-4">
-            <label htmlFor="firstName" className="block text-gray-700 text-sm font-bold mb-2">
-              First Name
+            <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
+              Username
             </label>
             <input
               type="text"
-              id="firstName"
+              id="username"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="John"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="lastName" className="block text-gray-700 text-sm font-bold mb-2">
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Doe"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              placeholder="john.doe"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -79,19 +57,6 @@ const RegisterPage = () => {
               placeholder="john.doe@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="mobile" className="block text-gray-700 text-sm font-bold mb-2">
-              Mobile
-            </label>
-            <input
-              type="text"
-              id="mobile"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="123-456-7890"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
             />
           </div>
           <div className="mb-6">

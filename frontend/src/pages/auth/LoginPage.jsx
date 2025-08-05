@@ -187,6 +187,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { loginUser } from '../../api'; // Import the API function
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -197,25 +198,17 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await loginUser({ email, password });
 
-      const data = await res.json();
-
-      if (res.ok) {
+      if (res.status === 200) {
         toast.success('Login successful!');
 
         // Store full user object in one place
-        const { username, email, first_name, last_name } = data.user;
-        localStorage.setItem('token', data.token);
+        const { username, email, id } = res.data.user;
+        localStorage.setItem('token', res.data.token);
         localStorage.setItem(
           'user',
-          JSON.stringify({ username, email, first_name, last_name })
+          JSON.stringify({ username, email, id })
         );
 
         // Notify Header (optional)
@@ -223,10 +216,10 @@ const LoginPage = () => {
 
         navigate('/dashboard');
       } else {
-        toast.error(data.message || 'Login failed.');
+        toast.error(res.data.message || 'Login failed.');
       }
     } catch (error) {
-      toast.error('Network error. Please try again later.');
+      toast.error(error.response?.data?.message || 'Network error. Please try again later.');
     }
   };
 
