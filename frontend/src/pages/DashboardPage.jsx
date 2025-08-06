@@ -11,7 +11,7 @@ const DashboardPage = () => {
         Your AI-powered legal assistant for document processing, case analysis, and legal drafting. Choose an action
         below to get started.
       </p>
-      <div className="grid md:grid-cols-3 gap-4 w-full max-w-2xl">
+      {/* <div className="grid md:grid-cols-3 gap-4 w-full max-w-2xl">
         <div className="bg-white p-6 rounded-xl border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all cursor-pointer">
           <div className="bg-blue-600 h-8 w-8 rounded-md mb-3"></div>
           <h3 className="font-semibold text-gray-800 mb-1">Upload Documents</h3>
@@ -27,7 +27,7 @@ const DashboardPage = () => {
           <h3 className="font-semibold text-gray-800 mb-1">Document Drafting</h3>
           <p className="text-sm text-gray-600">Generate legal documents using AI and templates</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
